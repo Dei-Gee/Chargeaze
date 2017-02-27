@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Case</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style type="text/css">
+  .chargeaze {
+    padding-left: 2%;
+    font-size:
+  }
+
+  .areaMap {
+    padding-left: 2%;
+  }
+
+
+
+  </style>
+  <!--Scripts -->
+  <script>
+  $(document).ready(function(){
+    // Hide the buttons as page opens
+    $("#charge_info").hide();
+    $("#do_list").hide();
+    $("#to_do").hide();
+    $("#charge_message").hide();
+    // Show the charge station button
+    $("#location").click(function(){
+      $("#charge_info").show();
+    });
+    // Show the to-do button
+    $("#charge_btn").click(function(){
+      $("#to_do").show();
+      $("#charge_message").show();
+      DS.route({origin:loc, destination:new google.maps.LatLng(49.2221971474114,-122.916822487356), travelMode: 'DRIVING'}, function(response, status) {
+        if (status === 'OK'){
+          directionDisplay.setDirections(response);
+
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+
+      });
+    });
+    // Show things to do
+    $("#to_do").click(function(){
+      $("#do_list").show();
+    });
+    //Place a marker at the user's position
+    $("#location_btn").click(function(){
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          loc=new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+          placeMarker(map, loc);
+        })
+      }
+    });
+
+
+
+  });
+
+
+
+  </script>
+
+</head>
+<body style="height:1500px">
+
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          <img style="max-width:30px; margin-top: -5px;"
+          <img alt="Brand" src="logo.png"></a>
+
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+        </div>
+
+        <div class="collapse navbar-collapse pull-left" id="bs-example-navbar-collapse-1" style="font-size:1.5em;" >
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+
+            <li><a id="location" href="#" class="btn btn-primary">Find Location</a></li>
+
+            <li><a id="about" href="#" data-toggle="modal" data-target="#myModal">About</a></li>
+            <li><a id="about" href="#" data-toggle="modal" data-target="#myModal2">Contact</a></li>
+            <li><a id="about" href="#" data-toggle="modal" data-target="#myModal3">Fun Facts</a></li>
+          </ul>
+        </div>
+      </nav>
+      <!--Title and buttons -->
+      <h2 class="chargeaze">Chargeaze</h2>
+      <div class="container" id="charge_info" style="margin-top:50px">
+        <div class="well">
+          <div class="row">
+            <div class="col-md-4">
+              <button class="btn-default" id="location_btn">Your Location</button>
+            </div>
+            <div class="col-md-4">
+              <button class="btn-default" id="charge_btn">Nearest Charging Station</button>
+            </div>
+            <div class="col-md-4">
+              <h4 id="charge_message"></h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <button class="btn-default" id="to_do">Find something to do?</button>
+        </div>
+        <br></br>
+
+        <div class="row" id="do_list">
+          <div class="col-md-4">
+            <p>Get coffee??</p>
+            <button class="btn-default" onclick="findCafe()" id="cafe_btn">Coffee</button>
+          </div>
+          <div class="col-md-4">
+            <p>Look at art??</p>
+            <button class="btn-default" onclick="findArt()">Art</button>
+          </div>
+          <div class="col-md-4">
+            <p>Grab some food??</p>
+            <button class="btn-default">Food</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              &times;
+              <h4 class="modal-title">About this app</h4>
+            </div>
+            <div class="modal-body">
+              <p>Chargeaze is a website that helps electric vehicle drivers find charge stations in the New Westminster area. While charging it also helps drivers pass the time by helping them find coffee shops, places to look at art, and restauraunts. </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Modal2 -->
+      <div id="myModal2" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              &times;
+              <h4 class="modal-title">Contact Info</h4>
+            </div>
+            <div class="modal-body">
+              <p>Andrew: just throw rocks at him</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Modal3 -->
+      <div id="myModal3" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              &times;
+              <h4 class="modal-title">Fun Facts</h4>
+            </div>
+            <div class="modal-body">
+              <p><ol><li>BC's CEV to BC</li></ol></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!--Google Maps -->
+      <h3 class="areaMap">Area Map</h3>
+
+      <div id="googleMap" style="width:100%;height:400px;"></div>
+
+      <script>
+      var map;
+      var DS;
+      var loc;
+      var directionDisplay;
+      function myMap() {
+
+        directionDisplay = new google.maps.DirectionsRenderer;
+        var mapProp= {
+          center:new google.maps.LatLng(49.2071146389935,-122.910094437622),
+          zoom:13,
+        };
+        map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        directionDisplay.setMap(map);
+
+        map.addListener('click', function(event) {
+
+        });
+        DS = new google.maps.DirectionsService;
+      }
+
+
+
+
+      function placeMarker(map, location) {
+        var marker = new google.maps.Marker({
+          position: location,
+          map: map
+        });
+        var infowindow = new google.maps.InfoWindow({
+          content: 'Latitude: ' + location.lat() +
+          '<br>Longitude: ' + location.lng()
+        });
+        infowindow.open(map,marker);
+      }
+
+      function findCafe(){
+
+        var infowindow;
+
+        var destination = new google.maps.LatLng(49.2221971474114,-122.916822487356);
+        infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: destination,
+          radius: 500,
+          type: ['cafe']
+        }, callback);
+
+
+        function callback(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+              createMarker(results[i]);
+            }
+          }
+        }
+
+        function createMarker(place) {
+          var placeLoc = place.geometry.location;
+          var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location
+          });
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(place.name);
+            infowindow.open(map, this);
+          });
+        }
+
+      }
+
+
+
+
+
+
+      </script>
+
+
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMxHXbXgI6On8dHY4Me9khlY3cBx3LQTc&callback=myMap&libraries=places"></script>
+
+    </body>
+    </html>
